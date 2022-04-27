@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuthState, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import auth from "../../Firebase/Firebase.init";
@@ -12,9 +12,25 @@ const Login = () => {
     useSignInWithGoogle(auth);
   const [user, loading, error] = useAuthState(auth);
 
-  if (user) {
-    navigate(from, { replace: true });
-  }
+  useEffect(() => {
+    if (user) {
+      const url = `http://localhost:5000/login`;
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          email: user.email,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          localStorage.setItem("accessToken", data.token);
+        });
+      navigate(from, { replace: true });
+    }
+  }, [navigate, from, user]);
 
   const handleSignIn = () => {
     signInWithGoogle();
