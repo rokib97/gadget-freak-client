@@ -4,6 +4,7 @@ import Home from "./Components/Home/Home";
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
 import OrderList from "./Components/OrderList/OrderList";
+import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 import Products from "./Components/Products/Products";
 import UploadProduct from "./Components/UploadProduct/UploadProduct";
 
@@ -17,9 +18,20 @@ function App() {
         <Route path="/products" element={<Products></Products>}></Route>
         <Route
           path="/uploadPd"
-          element={<UploadProduct></UploadProduct>}
+          element={
+            <PrivateRoute>
+              <UploadProduct></UploadProduct>
+            </PrivateRoute>
+          }
         ></Route>
-        <Route path="/orders" element={<OrderList></OrderList>}></Route>
+        <Route
+          path="/orders"
+          element={
+            <PrivateRoute>
+              <OrderList></OrderList>
+            </PrivateRoute>
+          }
+        ></Route>
         <Route path="/login" element={<Login></Login>}></Route>
       </Routes>
     </div>
